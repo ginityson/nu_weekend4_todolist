@@ -34,5 +34,6 @@ x add ajax post to button click that sends a simple object
 test
 
 update app.js with connectionString that points to local database
-add pg.connect that uses the connectionString and uses an SQL query to insert the object into the appropriate table in the db
+add pg.connect that uses the connectionString and uses an SQL query
+to insert the object into the appropriate table in the db
 test and view in Postico
