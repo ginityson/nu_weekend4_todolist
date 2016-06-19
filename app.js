@@ -36,18 +36,41 @@ app.post( '/createNew', urlencodedParser, function( req, res ){
   res.end();
 }); // end createNew
 
-//   console.log( 'in POST createNew: ' + req.body.task + " " + req.body.active );
-//
-//   app.post('/sendItem', urlencodedparser, function(req, res){
-//   var itemIn = req.body.todo;
-//   pg.connect(connectionString, function(err, client, done){
-//     client.query("INSERT INTO list (toDo, completed) VALUES ('"+ itemIn + "', false);");
-//     done();
-//   });
-//   console.log("in sendItem, and we have received: " + itemIn);
-//   res.end();
+// send back all records in users that conform to the query
+app.get( '/getUsers', function( req, res ){
+  console.log( 'in get users' );
+// this wil hold our results
+  var results =[];
+  pg.connect( connectionString, function( err, client, done ){
+    // get all user records and store in "query" variable
+    var query = client.query( 'SELECT * FROM users WHERE active=true ORDER BY id DESC;' );
+    console.log( "query: " + query );
+    // push each row in query into our results array
+    var rows = 0;
+    query.on( 'row', function ( row ){
+      results.push( row );
+    }); // end query push
+    query.on( 'end', function (){
+      return res.json( results );
+    });
+  }); // end connect
+});
+// // send back all records in users that conform to the query
+// app.get( '/getUsers', function( req, res ){
+//   console.log( 'in get users' );
+// // this wil hold our results
+//   var results =[];
+//   pg.connect( connectionString, function( err, client, done ){
+//     // get all user records and store in "query" variable
+//     var query = client.query( 'SELECT * FROM users WHERE active=true ORDER BY id DESC;' );
+//     console.log( "query: " + query );
+//     // push each row in query into our results array
+//     var rows = 0;
+//     query.on( 'row', function ( row ){
+//       results.push( row );
+//     }); // end query push
+//     query.on( 'end', function (){
+//       return res.json( results );
+//     });
+//   }); // end connect
 // });
-  //pg.connect( connectionString, function( err, client, done ){
-    // "users" is table. username = $1 = req.body.username
-    //client.query( 'INSERT INTO users ( username, active, created ) VALUES ( $1, $2, $3)', [ req.body.username, req.body.active, 'now()' ] );
-  //});

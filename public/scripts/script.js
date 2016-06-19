@@ -18,11 +18,47 @@ $(document).ready(function() {
           data: newTaskSet
      }); // end ajax
   }); // end addbutton
-  //put in getusers on click ajax
+  $('#getUsers').on('click', function(){
+    $.ajax({
+      type: 'GET',
+      url: '/getUsers',
+      success: function( data ){
+      showUsers( data );
+      } // end success
+    }); //end ajax
+  });
+  function showUsers( users ){
+    console.log( 'in showUsers:' + users );
+    for( i=0; i<users.length; i++ )
+    {
+      var userOut = "<p>" + users[ i ].username + ", active: " + users[ i ].active + " created: " + users[ i ].created + "</p>";
+      $('#outputDiv').append( userOut );
+      var userButton = "<button data-id='" + users[ i ].id + "'>Deactivate " + users[ i ].username + "</button>";
+      $('#outputDiv').append( userButton );
+
+    } // end for loop
+  } // end show users
+
+  // //put in getusers on click ajax
+  // $('#getUsers').on('click', function(){
+  //   $.ajax({
+  //     type: 'GET',
+  //     url: '/getUsers',
+  //     success: function( data ){
+  //     showUsers( data );
+  //     } // end success
+  //   }); //end ajax
+  // });
+  // function showUsers( users ){
+  //   console.log( 'in showUsers:' + users );
+  //   for( i=0; i<users.length; i++ )
+  //   {
+  //     var userOut = "<p>" + users[ i ].username + ", active: " + users[ i ].active + " created: " + users[ i ].created + "</p>";
+  //     $('#outputDiv').append( userOut );
+  //     var userButton = "<button data-id='" + users[ i ].id + "'>Deactivate " + users[ i ].username + "</button>";
+  //     $('#outputDiv').append( userButton );
+  //
+  //   } // end for loop
+  // } // end show users
+
 }); // end jQuery
-//   $('#submit-button').on(click, function() {
-//     console.log('the please push me button has been pushed');
-//   });
-//
-//
-// });
