@@ -1,15 +1,18 @@
 console.log('here we go again script.js sourced');
 
 $(document).ready(function() {
-  console.log('it was the eye of the tiger jquery loaded');
+  console.log(' the eye of the tiger ...jquery loaded');
+  showTasks();
+  
   $( '#submit-button' ).on( 'click', function(){
     console.log( 'submit-button clicked' );
+
     // get task from input
      var newTask = $( '#taskIn' ).val();
     // create object to post
       var newTaskSet={
         "task": newTask,
-        "completed": true
+        "completed": false
         };// end object
     // send object to server as a post
         $.ajax({
@@ -17,48 +20,67 @@ $(document).ready(function() {
           url: '/createNew',
           data: newTaskSet
      }); // end ajax
-  }); // end addbutton
-  $('#getUsers').on('click', function(){
+  }); // end submit-button
+
+  $('#getTasks').on('click', function(){
     $.ajax({
       type: 'GET',
-      url: '/getUsers',
-      success: function( data ){
-      showUsers( data );
+      url: '/getTasks',
+      success: function( newTaskSet ){
+        showTasks(newTaskSet);
       } // end success
     }); //end ajax
-  });
-  function showUsers( users ){
-    console.log( 'in showUsers:' + users );
-    for( i=0; i<users.length; i++ )
-    {
-      var userOut = "<p>" + users[ i ].username + ", active: " + users[ i ].active + " created: " + users[ i ].created + "</p>";
-      $('#outputDiv').append( userOut );
-      var userButton = "<button data-id='" + users[ i ].id + "'>Deactivate " + users[ i ].username + "</button>";
-      $('#outputDiv').append( userButton );
+  });//end getTasks
 
-    } // end for loop
-  } // end show users
 
-  // //put in getusers on click ajax
-  // $('#getUsers').on('click', function(){
-  //   $.ajax({
-  //     type: 'GET',
-  //     url: '/getUsers',
-  //     success: function( data ){
-  //     showUsers( data );
-  //     } // end success
-  //   }); //end ajax
-  // });
-  // function showUsers( users ){
-  //   console.log( 'in showUsers:' + users );
-  //   for( i=0; i<users.length; i++ )
-  //   {
-  //     var userOut = "<p>" + users[ i ].username + ", active: " + users[ i ].active + " created: " + users[ i ].created + "</p>";
-  //     $('#outputDiv').append( userOut );
-  //     var userButton = "<button data-id='" + users[ i ].id + "'>Deactivate " + users[ i ].username + "</button>";
-  //     $('#outputDiv').append( userButton );
-  //
-  //   } // end for loop
-  // } // end show users
+    $('body').on('click', '.delete', function(){
+      console.log('delete task');
+
+      var getID = {
+        'id': $(this).attr('data-id')
+      };
+      $.ajax({
+        type: 'POST',
+        url:'/deleteTask',
+        data: getID,
+        success: function( data ) {
+          showTasks(data);
+          console.log(data);
+        }//end success
+      });//end  ajax
+    });//end  delete
+
+    $('body').on('click', '.completed', function(){
+      console.log('completed task');
+      var getID = {
+          "id" : $(this).attr('data-id')
+      };
+
+      $.ajax({
+        type: 'POST',
+        url: '/completedTask',
+        data: getID,
+        success: function( data ){
+          showTasks(data);
+          console.log(data);// deactivateUser ();
+        } // end success
+      }); //end ajax
+    });//end completed
+
+      function showTasks( tasks ){
+        console.table( 'in showTasks:' + tasks );
+        //$('#outputDiv').empty();
+        for( i=0; i<tasks.length; i++ )
+        {
+          var taskOut = "<p>" + tasks[ i ].task + "</p>";
+          $('#outputDiv').append( taskOut );
+          var deleteButton = "<button class='delete' data-id='" + tasks[ i ].id + "'>Remove Task" + "</button>";
+          $('#outputDiv').append( deleteButton);
+          var taskButton = "<button class='completed' data-id='" + tasks[ i ].id + "'>Cross out " + tasks [i].task + "</button>";
+          $('#outputDiv').append( taskButton );
+
+        } // end for loop
+
+} // end show tasks
 
 }); // end jQuery
