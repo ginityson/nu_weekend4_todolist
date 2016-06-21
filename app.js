@@ -27,12 +27,13 @@ app.get( '/', function( req, res ){
 
 app.post( '/createNew', urlencodedParser, function( req, res ){
   pg.connect(connectionString, function(err, client, done){
-    client.query('INSERT INTO tasks (task, completed) VALUES ( $1, $2)', [ req.body.task, req.body.completed ] );
-  res.send()
+    client.query('INSERT INTO tasks (task, completed) VALUES ( $1, $2 )', [ req.body.task, req.body.completed ] );
+  res.send();
+  done();
   });//end pg connect
   console.log("in createNew, and we have received: " + req.body.task);
   res.end();
-  done();
+
 }); // end createNew
 
 app.post('/deleteTask', urlencodedParser, function(req, res){

@@ -2,8 +2,7 @@ console.log('here we go again script.js sourced');
 
 $(document).ready(function() {
   console.log(' the eye of the tiger ...jquery loaded');
-  showTasks();
-  
+
   $( '#submit-button' ).on( 'click', function(){
     console.log( 'submit-button clicked' );
 
@@ -67,20 +66,20 @@ $(document).ready(function() {
       }); //end ajax
     });//end completed
 
-      function showTasks( tasks ){
-        console.table( 'in showTasks:' + tasks );
+      function showTasks( newtask ){
+        console.table( 'in showTasks:' + newtask );
         //$('#outputDiv').empty();
-        for( i=0; i<tasks.length; i++ )
+        for( i=0; i<newtask.length; i++ )
         {
-          var taskOut = "<p>" + tasks[ i ].task + "</p>";
+          var taskOut = "<p>" + newtask[ i ].task + "</p>";
           $('#outputDiv').append( taskOut );
-          var deleteButton = "<button class='delete' data-id='" + tasks[ i ].id + "'>Remove Task" + "</button>";
+          var deleteButton = "<button class='delete' data-id='" + newtask[ i ].id + "'>Remove Task" + "</button>";
           $('#outputDiv').append( deleteButton);
-          var taskButton = "<button class='completed' data-id='" + tasks[ i ].id + "'>Cross out " + tasks [i].task + "</button>";
+          var taskButton = "<button class='completed' data-id='" + newtask[ i ].id + "'>Cross out " + newtask [i].task + "</button>";
           $('#outputDiv').append( taskButton );
 
         } // end for loop
 
-} // end show tasks
+      } // end show tasks
 
 }); // end jQuery
